@@ -43,8 +43,6 @@ order by highest_death_count desc
 
 
 
-
-
 --- LET'S BREAK THINGS DOWN BY CONTINENT
 select location, MAX(CAST(total_deaths as int)) as highest_death_count
 from covids_death
@@ -87,7 +85,6 @@ order by 1,2
 select dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations
 , SUM(CAST(vac.new_vaccinations as int)) OVER(Partition by dea.location ORDER by dea.location, dea.date) AS rolling_sum_peoplevaccinated
 -- SUM(CONVERT(int, vac.new_vaccinations)) OVER(Partiton by dea.location)
-, 
 from covids_death as dea
 JOIN 
 covids_vaccinations as vac
@@ -132,7 +129,6 @@ INSERT into #PercentPopulationVaccinated
 select dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations
 , SUM(CAST(vac.new_vaccinations as int)) OVER(Partition by dea.location ORDER by dea.location, dea.date) AS rolling_sum_peoplevaccinated
 -- SUM(CONVERT(int, vac.new_vaccinations)) OVER(Partiton by dea.location)
-
 from covids_death as dea
 JOIN 
 covids_vaccinations as vac
@@ -150,7 +146,6 @@ CREATE view PercentPopulation AS
 select dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations
 , SUM(CAST(vac.new_vaccinations as int)) OVER(Partition by dea.location ORDER by dea.location, dea.date) AS rolling_sum_peoplevaccinated
 -- SUM(CONVERT(int, vac.new_vaccinations)) OVER(Partiton by dea.location)
-
 from covids_death as dea
 JOIN 
 covids_vaccinations as vac
@@ -158,6 +153,5 @@ covids_vaccinations as vac
 	and dea.date = vac.date
 WHERE dea.continent is not null
 
-
-
+-- Querying the above view
 select * from PercentPopulation
